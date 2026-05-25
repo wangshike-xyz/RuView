@@ -50,6 +50,7 @@ Statuses: **Proposed** (under discussion), **Accepted** (approved and/or impleme
 | [ADR-040](ADR-040-wasm-programmable-sensing.md) | WASM Programmable Sensing (Tier 3) | Accepted |
 | [ADR-041](ADR-041-wasm-module-collection.md) | WASM Module Collection (65 edge modules) | Accepted (hardware-validated) |
 | [ADR-044](ADR-044-provisioning-tool-enhancements.md) | Provisioning Tool Enhancements | Proposed |
+| [ADR-110](ADR-110-esp32-c6-firmware-extension.md) | ESP32-C6 firmware extension — Wi-Fi 6 / 802.15.4 / TWT / LP-core | Accepted, P1-P10 complete, firmware-side substrate closed at **[v0.7.0-esp32](https://github.com/ruvnet/RuView/releases/tag/v0.7.0-esp32)**. Companion docs: [`WITNESS-LOG-110`](../WITNESS-LOG-110.md) (13 §A0.x entries · 99.56 % cross-board RX · **104.1 µs smoothed sync stdev** · ≤100 µs target met), [`ADR-110-REVIEW-GUIDE`](../ADR-110-REVIEW-GUIDE.md) (one-page reviewer tour), [`ADR-110-BRANCH-STATE`](../ADR-110-BRANCH-STATE.md) (coordination map vs `feat/adr-115-ha-mqtt-matter`). Host decoders + tests: Python `SyncPacketParser` (10) + Rust `wifi_densepose_hardware::SyncPacket` (15), cross-language hex pin gates drift. |
 
 ### Signal processing and sensing
 
@@ -89,6 +90,7 @@ Statuses: **Proposed** (under discussion), **Accepted** (approved and/or impleme
 | [ADR-035](ADR-035-live-sensing-ui-accuracy.md) | Live Sensing UI Accuracy and Data Transparency | Accepted |
 | [ADR-036](ADR-036-rvf-training-pipeline-ui.md) | Training Pipeline UI Integration | Proposed |
 | [ADR-043](ADR-043-sensing-server-ui-api-completion.md) | Sensing Server UI API Completion (14 endpoints) | Accepted |
+| [ADR-115](ADR-115-home-assistant-integration.md) | Home Assistant integration via MQTT auto-discovery + Matter bridge (HA-DISCO + HA-FABRIC + HA-MIND) | Accepted (MQTT track) / Proposed (Matter SDK P8b) |
 
 ### Architecture and infrastructure
 
@@ -108,6 +110,7 @@ Statuses: **Proposed** (under discussion), **Accepted** (approved and/or impleme
 | [ADR-095](ADR-095-rvcsi-edge-rf-sensing-platform.md) | rvCSI — Edge RF Sensing Runtime Platform | Proposed |
 | [ADR-096](ADR-096-rvcsi-ffi-crate-layout.md) | rvCSI — Crate Topology, the napi-c Shim, and the napi-rs Node Surface | Proposed |
 | [ADR-097](ADR-097-adopt-rvcsi-as-ruview-csi-runtime.md) | Adopt rvCSI as RuView's primary CSI runtime (phased adoption) | Proposed |
+| [ADR-098](ADR-098-evaluate-midstream-fit.md) | Evaluate `ruvnet/midstream` for RuView's CSI / WebSocket / mesh pipeline | Rejected |
 | [ADR-099](ADR-099-midstream-introspection-tap.md) | Adopt midstream as RuView's real-time introspection + low-latency tap | Proposed |
 
 ---

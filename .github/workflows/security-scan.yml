@@ -32,7 +32,7 @@ jobs:
 
     - name: Set up Python
       continue-on-error: true
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
@@ -99,7 +99,7 @@ jobs:
 
     - name: Set up Python
       continue-on-error: true
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
@@ -170,7 +170,7 @@ jobs:
 
     - name: Build Docker image for scanning
       continue-on-error: true
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v7
       with:
         context: .
         target: production
@@ -197,7 +197,7 @@ jobs:
 
     - name: Run Grype vulnerability scanner
       continue-on-error: true
-      uses: anchore/scan-action@v3
+      uses: anchore/scan-action@v7
       id: grype-scan
       with:
         image: 'wifi-densepose:scan'
@@ -343,7 +343,7 @@ jobs:
 
     - name: Set up Python
       continue-on-error: true
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'

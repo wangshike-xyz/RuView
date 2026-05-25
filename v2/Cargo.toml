@@ -4,9 +4,16 @@ members = [
     "crates/wifi-densepose-core",
     "crates/wifi-densepose-signal",
     "crates/wifi-densepose-nn",
-    "crates/wifi-densepose-api",
-    "crates/wifi-densepose-db",
-    "crates/wifi-densepose-config",
+    # wifi-densepose-api / -db / -config: removed in #578.
+    # The crate names were reserved early for an envisioned REST/database/config
+    # split, but no implementation followed and no code referenced them. The
+    # functionality they would provide is covered today by:
+    #   - REST/WS: `wifi-densepose-sensing-server` (Axum)
+    #   - Config:  per-crate config + CLI args in `wifi-densepose-sensing-server`
+    #             and `wifi-densepose-desktop`
+    #   - DB:      no persistent state; system is real-time
+    # If we ever need any of these as a published surface, they can be
+    # reintroduced with a real implementation.
     "crates/wifi-densepose-hardware",
     "crates/wifi-densepose-wasm",
     "crates/wifi-densepose-cli",
@@ -21,6 +28,25 @@ members = [
     "crates/wifi-densepose-geo",
     "crates/nvsim",
     "crates/nvsim-server",
+    # ADR-100/ADR-101: Cognitum Cog packaging — first Cog from this repo.
+    # Ships the wifi-densepose pose-estimation model as a signed binary +
+    # JSONL manifest installable by the Cognitum V0 appliance (cognitum-v0,
+    # cognitum-cluster-*, ruvultra). The companion appliance-side crate
+    # lives in cognitum-one/v0-appliance as `cognitum-pose-estimation`.
+    "crates/cog-pose-estimation",
+    # ADR-103: Learned multi-person counter (SOTA path) — replaces the
+    # PR #491 slot heuristic with a Candle network + Stoer-Wagner fusion.
+    # Motivated by #499 ghost-skeleton reports.
+    "crates/cog-person-count",
+    # ADR-116: Home Assistant + Matter Cognitum Seed cog. Wraps the
+    # ADR-115 MQTT publisher as a Seed-installable artifact with
+    # mDNS, embedded broker, RuVector thresholds, Ed25519 witness.
+    "crates/cog-ha-matter",
+    # ADR-118: BFLD — Beamforming Feedback Layer for Detection. The
+    # privacy/safety layer that measures and gates identity leakage from
+    # WiFi BFI captures. Sub-ADRs: 119 (frame), 120 (privacy class),
+    # 121 (identity risk), 122 (HA/Matter), 123 (capture path).
+    "crates/wifi-densepose-bfld",
     # rvCSI — edge RF sensing runtime (ADR-095 platform, ADR-096 FFI/crate layout):
     # lives in its own repo (https://github.com/ruvnet/rvcsi), vendored here as
     # `vendor/rvcsi` and published to crates.io as `rvcsi-*` 0.3.x. Depend on the
@@ -46,7 +72,7 @@ categories = ["science", "computer-vision", "wasm"]
 
 [workspace.dependencies]
 # Core utilities
-thiserror = "1.0"
+thiserror = "2.0"
 anyhow = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -56,14 +82,14 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
 # Signal processing
-ndarray = { version = "0.15", features = ["serde"] }
-ndarray-linalg = { version = "0.16", features = ["openblas-static"] }
+ndarray = { version = "0.17", features = ["serde"] }
+ndarray-linalg = { version = "0.18", features = ["openblas-static"] }
 rustfft = "6.1"
 num-complex = "0.4"
 num-traits = "0.2"
 
 # Neural network
-tch = "0.14"
+tch = "0.24"
 ort = { version = "2.0.0-rc.11" }
 candle-core = "0.4"
 candle-nn = "0.4"
@@ -71,7 +97,7 @@ candle-nn = "0.4"
 # Web framework
 axum = { version = "0.7", features = ["ws", "macros"] }
 tower = { version = "0.4", features = ["full"] }
-tower-http = { version = "0.5", features = ["cors", "trace", "compression-gzip"] }
+tower-http = { version = "0.6", features = ["cors", "trace", "compression-gzip"] }
 hyper = { version = "1.1", features = ["full"] }
 
 # Database
@@ -98,7 +124,7 @@ pcap = "1.1"
 petgraph = "0.6"
 
 # Data loading
-ndarray-npy = "0.8"
+ndarray-npy = "0.10"
 walkdir = "2.4"
 
 # Hashing (for proof)
@@ -127,17 +153,20 @@ mockall = "0.12"
 wiremock = "0.5"
 
 # midstreamer integration (published on crates.io)
-midstreamer-quic = "0.1.0"
-midstreamer-scheduler = "0.1.0"
-midstreamer-temporal-compare = "0.1.0"
-midstreamer-attractor = "0.1.0"
+# 0.1.0 was yanked; upgrade to latest 0.3/0.2 releases which pull in
+# quinn-proto >=0.11.14 (fixes RUSTSEC-2026-0037) and
+# rustls-webpki >=0.103.13 (fixes RUSTSEC-2026-0049/0098/0099/0104).
+midstreamer-quic = "0.3"
+midstreamer-scheduler = "0.2"
+midstreamer-temporal-compare = "0.2"
+midstreamer-attractor = "0.2"
 
 # ruvector integration (published on crates.io)
 # Vendored at v2.1.0 in vendor/ruvector; using crates.io versions until published.
-ruvector-core = "2.0.4"
+ruvector-core = "2.2.0"
 ruvector-mincut = "2.0.4"
 ruvector-attn-mincut = "2.0.4"
-ruvector-temporal-tensor = "2.0.4"
+ruvector-temporal-tensor = "2.0.6"
 ruvector-solver = "2.0.4"
 ruvector-attention = "2.0.4"
 ruvector-crv = "0.1.1"
